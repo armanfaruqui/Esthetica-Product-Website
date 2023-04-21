@@ -409,6 +409,6 @@ tick();
 document.addEventListener("DOMContentLoaded", function () {
   var h2 = document.getElementById("proto");
   h2.addEventListener("click", function () {
-    window.location.href = "prototype/index.html";
+    window.location.href = "./prototype/index.html";
   });
 });
