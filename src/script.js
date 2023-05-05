@@ -21,8 +21,8 @@ const body = document.querySelector("body");
 const main = document.querySelector("#main");
 const heading = document.querySelector(".heading");
 const description = document.querySelector(".description");
-const learn = document.querySelector(".learn");
-const proto = document.querySelector("#proto");
+const learn = document.querySelectorAll(".learn");
+console.log(learn);
 
 // Pantone panels
 const panel1 = document.querySelector(".panel-1");
@@ -284,10 +284,10 @@ function changeColor() {
     body.style.backgroundColor = "#f7ead7";
     heading.style.color = "#311508";
     description.style.color = "#311508";
-    learn.style.color = "#311508";
-    learn.style.borderColor = "#311508";
-    proto.style.color = "#311508";
-    proto.style.borderColor = "#311508";
+    learn[0].style.color = "#311508";
+    learn[0].style.borderColor = "#311508";
+    learn[0].style.color = "#311508";
+    learn[0].style.borderColor = "#311508";
 
     panel1.style.backgroundColor = "rgb(255, 253, 245)";
     panel2.style.backgroundColor = "#a2b9e7";
@@ -299,10 +299,10 @@ function changeColor() {
     body.style.backgroundColor = "#2b2b28";
     heading.style.color = "#d62828";
     description.style.color = "#d62828";
-    learn.style.color = "#d62828";
-    learn.style.borderColor = "#d62828";
-    proto.style.color = "#311508";
-    proto.style.borderColor = "#311508";
+    learn[0].style.color = "#d62828";
+    learn[0].style.borderColor = "#d62828";
+    learn[1].style.color = "#d62828";
+    learn[1].style.borderColor = "#d62828";
 
     panel1.style.backgroundColor = "#dddbd1";
     panel2.style.backgroundColor = "#e0ccba";
@@ -314,10 +314,10 @@ function changeColor() {
     body.style.backgroundColor = "#03066e";
     heading.style.color = "#ffe537";
     description.style.color = "#ffe537";
-    learn.style.color = "#ffe537";
-    learn.style.borderColor = "#ffe537";
-    proto.style.color = "#311508";
-    proto.style.borderColor = "#311508";
+    learn[0].style.color = "#ffe537";
+    learn[0].style.borderColor = "#ffe537";
+    learn[1].style.color = "#ffe537";
+    learn[1].style.borderColor = "#ffe537";
 
     panel1.style.backgroundColor = "#eb221b";
     panel2.style.backgroundColor = "#f54f10";
@@ -329,10 +329,10 @@ function changeColor() {
     body.style.backgroundColor = "#c1c9dd";
     heading.style.color = "#215b33";
     description.style.color = "#215b33";
-    learn.style.color = "#215b33";
-    learn.style.borderColor = "#215b33";
-    proto.style.color = "#311508";
-    proto.style.borderColor = "#311508";
+    learn[0].style.color = "#215b33";
+    learn[0].style.borderColor = "#215b33";
+    learn[1].style.color = "#215b33";
+    learn[1].style.borderColor = "#215b33";
 
     panel1.style.backgroundColor = "#cec1b5";
     panel2.style.backgroundColor = "#d8b596";
@@ -344,10 +344,10 @@ function changeColor() {
     body.style.backgroundColor = "#e7e4dc";
     heading.style.color = "#766a5c";
     description.style.color = "#766a5c";
-    learn.style.color = "#766a5c";
-    learn.style.borderColor = "#766a5c";
-    proto.style.color = "#311508";
-    proto.style.borderColor = "#311508";
+    learn[0].style.color = "#766a5c";
+    learn[0].style.borderColor = "#766a5c";
+    learn[1].style.color = "#766a5c";
+    learn[1].style.borderColor = "#766a5c";
 
     panel1.style.backgroundColor = "#f5f3e6";
     panel2.style.backgroundColor = "#9b978b";
