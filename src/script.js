@@ -22,6 +22,7 @@ const main = document.querySelector("#main");
 const heading = document.querySelector(".heading");
 const description = document.querySelector(".description");
 const learn = document.querySelector(".learn");
+const proto = document.querySelector("#proto");
 
 // Pantone panels
 const panel1 = document.querySelector(".panel-1");
@@ -285,6 +286,8 @@ function changeColor() {
     description.style.color = "#311508";
     learn.style.color = "#311508";
     learn.style.borderColor = "#311508";
+    proto.style.color = "#311508";
+    proto.style.borderColor = "#311508";
 
     panel1.style.backgroundColor = "rgb(255, 253, 245)";
     panel2.style.backgroundColor = "#a2b9e7";
@@ -298,6 +301,8 @@ function changeColor() {
     description.style.color = "#d62828";
     learn.style.color = "#d62828";
     learn.style.borderColor = "#d62828";
+    proto.style.color = "#311508";
+    proto.style.borderColor = "#311508";
 
     panel1.style.backgroundColor = "#dddbd1";
     panel2.style.backgroundColor = "#e0ccba";
@@ -311,6 +316,8 @@ function changeColor() {
     description.style.color = "#ffe537";
     learn.style.color = "#ffe537";
     learn.style.borderColor = "#ffe537";
+    proto.style.color = "#311508";
+    proto.style.borderColor = "#311508";
 
     panel1.style.backgroundColor = "#eb221b";
     panel2.style.backgroundColor = "#f54f10";
@@ -324,6 +331,8 @@ function changeColor() {
     description.style.color = "#215b33";
     learn.style.color = "#215b33";
     learn.style.borderColor = "#215b33";
+    proto.style.color = "#311508";
+    proto.style.borderColor = "#311508";
 
     panel1.style.backgroundColor = "#cec1b5";
     panel2.style.backgroundColor = "#d8b596";
@@ -337,6 +346,8 @@ function changeColor() {
     description.style.color = "#766a5c";
     learn.style.color = "#766a5c";
     learn.style.borderColor = "#766a5c";
+    proto.style.color = "#311508";
+    proto.style.borderColor = "#311508";
 
     panel1.style.backgroundColor = "#f5f3e6";
     panel2.style.backgroundColor = "#9b978b";
