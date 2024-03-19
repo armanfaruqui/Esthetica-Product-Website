@@ -120,11 +120,31 @@ position = -5; // Assuming this is your initial state
 scroll = false; // Initial scroll state
 
 const tileImages = [
-  { name: "choco", path: "/images/chocoTile.jpg", color: 0xf7ead7 },
-  { name: "royal", path: "/images/horrorTile.jpg", color: 0x2b2b28 },
-  { name: "iri", path: "/images/iriTile.jpg", color: 0x02086a },
-  { name: "nature", path: "/images/natureTile.jpg", color: 0xc1c9dd },
-  { name: "lime", path: "/images/limeTile.jpg", color: 0xe4e4e4 },
+  {
+    name: "choco",
+    path: "/images/chocoTile.jpg",
+    color: 0xf7ead7,
+  },
+  {
+    name: "royal",
+    path: "/images/horrorTile.jpg",
+    color: 0x2b2b28,
+  },
+  {
+    name: "iri",
+    path: "/images/iriTile.jpg",
+    color: 0x02086a,
+  },
+  {
+    name: "nature",
+    path: "/images/natureTile.jpg",
+    color: 0xc1c9dd,
+  },
+  {
+    name: "lime",
+    path: "/images/limeTile.jpg",
+    color: 0xe4e4e4,
+  },
 ];
 
 tileImages.forEach((tileData, index) => {
