@@ -1,11 +1,21 @@
 import * as THREE from "three";
 import gsap from "gsap";
 import * as dat from "lil-gui";
-import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
+
+document.addEventListener("DOMContentLoaded", function () {
+  var isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+  if (isMobile) {
+    document.getElementById("mobile-warning").style.display = "flex";
+    // Optional: Hide the rest of your site's content if necessary
+    document.body.style.overflow = "hidden"; // Prevent scrolling
+    // For hiding everything else, you might add a specific class to all other elements or directly manipulate their style here
+  }
+});
 
 //DOM Elements
 const canvas = document.querySelector("canvas.webgl");
 
+const logo = document.querySelector("#logo");
 const scrollBtn = document.querySelector("#scroll-btn");
 const scrollBtn2 = document.querySelector("#scroll-btn2");
 const scrollBtn3 = document.querySelector("#scroll-btn3");
@@ -34,119 +44,100 @@ const panel5 = document.querySelector(".panel-5");
 let position = -5; // Checks position of tiles
 let scroll = false; // Checks if the user should be able to scroll tiles
 
-// window.onload = (event) => {
-//     canvas.style.display = "block";
-//     page2.style.display ="none"
-//   };
+let landingIframe = document.getElementsByClassName("landing");
 
-// Scroll events
+console.log();
+
+const canvasStyleWidth = parseFloat(getComputedStyle(canvas).width);
+const widthRatio = canvasStyleWidth / canvas.width;
+
+logo.addEventListener("click", function () {
+  page1.scrollIntoView({ behavior: "smooth" });
+  console.log("logo clicked");
+  changeColor();
+  position = -5;
+  tileState();
+});
 
 scrollBtn.addEventListener("click", function () {
-  canvas.style.display = "none";
-  page2.style.display = "block";
-  page2.scrollIntoView({ behavior: "smooth" });
   position = -5;
-  changeColor();
+  // page2.style.display = "block";
+  page2.scrollIntoView({ behavior: "smooth" });
+  changeToLime();
+  body.style.backgroundColor = "#fafaf9";
+  heading.style.color = "#b1ee46s";
+  description.style.color = "#b1ee46s";
 });
 
 scrollBtn2.addEventListener("click", function () {
   page3.style.display = "block";
   page3.scrollIntoView({ behavior: "smooth" });
+  changeColor();
 });
 
 scrollBtn3.addEventListener("click", function () {
   page4.style.display = "block";
-  page2.style.display = "none";
   page4.scrollIntoView({ behavior: "smooth" });
 });
 
-/**
- * Base
- */
-
-// Scene
 const scene = new THREE.Scene();
 
-/**
- * Base
- */
-const gltfLoader = new GLTFLoader();
-
 class Tile {
-  constructor(name) {
-    (this.x = 1.7),
-      (this.y = 3.672),
-      (this.z = 0.2),
-      (this.name = name),
-      (this.mesh = undefined);
+  constructor(name, imagePath, sideColor) {
+    this.dimensions = { x: 1.8, y: 3.7, z: 0.2 };
+    this.name = name;
+    this.mesh = undefined;
+    this.imagePath = imagePath;
+    this.sideColor = sideColor;
   }
 
-  createMesh() {
-    return new Promise((resolve, reject) => {
-      gltfLoader.load(`/models/${this.name}.glb`, (gltf) => {
-        console.log(this);
-        console.log(gltf.scene.children[0]);
-        let t_mesh = gltf.scene.children[0];
-        // scene.add(t_mesh)
-        // console.log(this)
-        resolve(t_mesh);
-      });
-    });
+  async createMesh() {
+    const geometry = new THREE.BoxGeometry(
+      this.dimensions.x,
+      this.dimensions.y,
+      this.dimensions.z
+    );
+    const loader = new THREE.TextureLoader();
+    const texture = await loader.load(this.imagePath);
+
+    const materials = [
+      new THREE.MeshBasicMaterial({ color: this.sideColor }),
+      new THREE.MeshBasicMaterial({ color: this.sideColor }),
+      new THREE.MeshBasicMaterial({ color: this.sideColor }),
+      new THREE.MeshBasicMaterial({ color: this.sideColor }),
+      new THREE.MeshBasicMaterial({ map: texture }),
+      new THREE.MeshBasicMaterial({ color: this.sideColor }),
+    ];
+
+    this.mesh = new THREE.Mesh(geometry, materials);
+    return this.mesh;
   }
 }
 
-let distances = {
-  x: 2.5,
-  z: 0.2,
-  rY: 0.1,
-};
+let distances = { x: 2.5, z: 0.2, rY: 0.1 };
+let tiles = []; // Array to store tiles
+position = -5; // Assuming this is your initial state
+scroll = false; // Initial scroll state
 
-let tile1 = new Tile("choco");
-tile1.createMesh().then(function (result) {
-  // console.log(result)
-  tile1.mesh = result;
-  scene.add(tile1.mesh);
-  animateTilesSlowly(tile1, 0, 0, 0);
-  tile1.mesh.position.z = 0.01;
-});
+const tileImages = [
+  { name: "choco", path: "/images/chocoTile.jpg", color: 0xf7ead7 },
+  { name: "royal", path: "/images/horrorTile.jpg", color: 0x2b2b28 },
+  { name: "iri", path: "/images/iriTile.jpg", color: 0x02086a },
+  { name: "nature", path: "/images/natureTile.jpg", color: 0xc1c9dd },
+  { name: "lime", path: "/images/limeTile.jpg", color: 0xe4e4e4 },
+];
 
-let tile2 = new Tile("royal");
-tile2.createMesh().then(function (result) {
-  // console.log(result)
-  tile2.mesh = result;
-  scene.add(tile2.mesh);
-  animateTilesSlowly(tile2, -1, -1, -1, 2, 1);
+tileImages.forEach((tileData, index) => {
+  let tile = new Tile(tileData.name, tileData.path, tileData.color);
+  tile.createMesh().then((mesh) => {
+    scene.add(mesh);
+    tiles.push(tile); // Store the tile
+    if (index === tileImages.length - 1) {
+      tileState(); // Set initial tile positions after all tiles are created
+      makeScrollable();
+    }
+  });
 });
-let tile3 = new Tile("iri");
-tile3.createMesh().then(function (result) {
-  // console.log(result)
-  tile3.mesh = result;
-  scene.add(tile3.mesh);
-  animateTilesSlowly(tile3, -2, -3, -2, 2, 0.8);
-});
-let tile4 = new Tile("nature");
-tile4.createMesh().then(function (result) {
-  // console.log(result)
-  tile4.mesh = result;
-  scene.add(tile4.mesh);
-  animateTilesSlowly(tile4, -3, -6, -3, 2, 0.6, makeScrollable());
-});
-let tile5 = new Tile("wabi");
-tile5.createMesh().then(function (result) {
-  // console.log(result)
-  tile5.mesh = result;
-  scene.add(tile5.mesh);
-  animateTilesSlowly(tile5, -4.3, -12, -5, 2, 0.4);
-});
-console.log(tile1.mesh);
-
-// let tile6 = new Tile("wabi")
-// tile6.createMesh().then(function(result){
-//     // console.log(result)
-//     tile6.mesh = result
-//     scene.add(tile6.mesh)
-//     animateTilesSlowly(tile6, -5, -16, -5, 2, 0.2)
-// })
 
 function animateTiles(tile, xPos, zPos, yRot) {
   gsap.to(tile.mesh.position, {
@@ -195,86 +186,84 @@ function makeScrollable() {
   scroll = true;
 }
 
+console.log(`Position ${position}`);
+
 function tileState() {
   if (position === -5) {
     console.log("at position -5");
-    animateTiles(tile1, 0, 0, 0);
-    animateTiles(tile2, -1, -1, -1);
-    animateTiles(tile3, -2, -3, -2);
-    animateTiles(tile4, -3, -6, -3);
-    animateTiles(tile5, -4.3, -12, -5);
-    // animateTiles(tile6, -5, -16, -5)
+    animateTiles(tiles[0], 0, 0, 0);
+    animateTiles(tiles[1], -1, -1, -1);
+    animateTiles(tiles[2], -2, -3, -2);
+    animateTiles(tiles[3], -3, -6, -3);
+    animateTiles(tiles[4], -4.3, -12, -5);
   }
 
   if (position === -4) {
     console.log("at position -4");
-    animateTiles(tile1, 1, -1, 1);
-    animateTiles(tile2, 0, 0, 0);
-    animateTiles(tile3, -1, -1, -1);
-    animateTiles(tile4, -2, -3, -2);
-    animateTiles(tile5, -3, -6, -3);
-    // animateTiles(tile6, -4.3, -12, -4)
+    animateTiles(tiles[0], 1, -1, 1);
+    animateTiles(tiles[1], 0, 0, 0);
+    animateTiles(tiles[2], -1, -1, -1);
+    animateTiles(tiles[3], -2, -3, -2);
+    animateTiles(tiles[4], -3, -6, -3);
   }
 
   if (position === -3) {
     console.log("at position -3");
-    animateTiles(tile1, 2, -3, 2);
-    animateTiles(tile2, 1, -1, 1);
-    animateTiles(tile3, 0, 0, 0);
-    animateTiles(tile4, -1, -1, -1);
-    animateTiles(tile5, -2, -3, -2);
-    // animateTiles(tile6, -3, -6, -3)
+    animateTiles(tiles[0], 2, -3, 2);
+    animateTiles(tiles[1], 1, -1, 1);
+    animateTiles(tiles[2], 0, 0, 0);
+    animateTiles(tiles[3], -1, -1, -1);
+    animateTiles(tiles[4], -2, -3, -2);
   }
 
   if (position === -2) {
     console.log("at position -2");
-    animateTiles(tile1, 3, -6, 3);
-    animateTiles(tile2, 2, -3, 2);
-    animateTiles(tile3, 1, -1, 1);
-    animateTiles(tile4, 0, 0, 0);
-    animateTiles(tile5, -1, -1, -1);
-    // animateTiles(tile6, -2, -3, -2)
+    animateTiles(tiles[0], 3, -6, 3);
+    animateTiles(tiles[1], 2, -3, 2);
+    animateTiles(tiles[2], 1, -1, 1);
+    animateTiles(tiles[3], 0, 0, 0);
+    animateTiles(tiles[4], -1, -1, -1);
   }
 
   if (position === -1) {
     console.log("at position -1");
-    animateTiles(tile1, 4.3, -12, 5);
-    animateTiles(tile2, 3, -6, 3);
-    animateTiles(tile3, 2, -3, 2);
-    animateTiles(tile4, 1, -1, 1);
-    animateTiles(tile5, 0, 0, 0);
-    // animateTiles(tile6, -1, -1, -1)
+    animateTiles(tiles[0], 4.3, -12, 5);
+    animateTiles(tiles[1], 3, -6, 3);
+    animateTiles(tiles[2], 2, -3, 2);
+    animateTiles(tiles[3], 1, -1, 1);
+    animateTiles(tiles[4], 0, 0, 0);
   }
 
   if (position === 0) {
     console.log("at position 0");
-    animateTiles(tile1, 5, -16, 5);
-    animateTiles(tile2, 4.3, -12, 5);
-    animateTiles(tile3, 3, -6, 3);
-    animateTiles(tile4, 2, -3, 2);
-    animateTiles(tile5, 1, -1, 1);
-    // animateTiles(tile6, 0, 0, 0)
-    console.log(tile1.mesh.position.x);
+    animateTiles(tiles[0], 5, -16, 5);
+    animateTiles(tiles[1], 4.3, -12, 5);
+    animateTiles(tiles[2], 3, -6, 3);
+    animateTiles(tiles[3], 2, -3, 2);
+    animateTiles(tiles[4], 1, -1, 1);
   }
 }
+console.log(scroll);
 
 canvas.addEventListener("click", function (e) {
+  const canvasStyleWidth = parseFloat(getComputedStyle(canvas).width);
+  const widthRatio = canvasStyleWidth / canvas.width;
+  const adjustedOffsetX = e.offsetX / widthRatio; // Adjusted for the displayed size
+
   if (scroll === true) {
-    if (e.offsetX >= canvas.width / 2) {
+    if (adjustedOffsetX >= canvas.width / 2) {
       position--;
       if (position < -5) {
         position = -5;
       }
-      tileState();
-      changeColor();
-    } else if (e.offsetX <= canvas.width / 2) {
+    } else {
       position++;
       if (position > -1) {
         position = -1;
       }
-      tileState();
-      changeColor();
     }
+    tileState();
+    changeColor();
   }
 });
 
@@ -289,11 +278,7 @@ function changeColor() {
     learn[0].style.color = "#311508";
     learn[0].style.borderColor = "#311508";
 
-    panel1.style.backgroundColor = "rgb(255, 253, 245)";
-    panel2.style.backgroundColor = "#a2b9e7";
-    panel3.style.backgroundColor = "#65341c";
-    panel4.style.backgroundColor = "#402315";
-    panel5.style.backgroundColor = "#311508";
+    changeToChoco();
   } else if (position === -4) {
     // Royal
     body.style.backgroundColor = "#2b2b28";
@@ -341,19 +326,15 @@ function changeColor() {
     panel5.style.backgroundColor = "#2b2b28";
   } else if (position === -1) {
     // Wabi
-    body.style.backgroundColor = "#e7e4dc";
-    heading.style.color = "#766a5c";
-    description.style.color = "#766a5c";
-    learn[0].style.color = "#766a5c";
-    learn[0].style.borderColor = "#766a5c";
-    learn[1].style.color = "#766a5c";
-    learn[1].style.borderColor = "#766a5c";
+    body.style.backgroundColor = "#fafaf9";
+    heading.style.color = "#b1ee46";
+    description.style.color = "#b1ee46";
+    learn[0].style.color = "#b1ee46";
+    learn[0].style.borderColor = "#b1ee46";
+    learn[1].style.color = "#b1ee46";
+    learn[1].style.borderColor = "#b1ee46";
 
-    panel1.style.backgroundColor = "#f5f3e6";
-    panel2.style.backgroundColor = "#9b978b";
-    panel3.style.backgroundColor = "#988068";
-    panel4.style.backgroundColor = "#766a5c";
-    panel5.style.backgroundColor = "#37342d";
+    changeToLime();
   }
 }
 
@@ -379,29 +360,14 @@ const renderer = new THREE.WebGLRenderer({
   canvas: canvas,
   alpha: true,
 });
-renderer.setSize(sizes.width, sizes.height);
 
-// Lights
-const ambientLight = new THREE.AmbientLight(0xffffff, 0.2);
+renderer.setSize(sizes.width, sizes.height);
+renderer.setPixelRatio(window.devicePixelRatio);
+
+const ambientLight = new THREE.AmbientLight(0xffffff, 1); // Increased intensity for uniform illumination
 scene.add(ambientLight);
 
-const rectAreaLight = new THREE.RectAreaLight(0xffffff, 1.2, 4, 10);
-rectAreaLight.position.z = 1;
-scene.add(rectAreaLight);
-
-const light = new THREE.PointLight(0xffffff, 1, 100);
-light.position.set(0, 0, -20);
-scene.add(light);
-
-/**
- * Animate
- */
-// gsap.to(mesh.position, { duration: 1, delay: 1, x: 2 })
-
 let time = Date.now();
-
-// gsap.to(mesh.position, { duration: 0.3, delay: 2, x: 2})
-// gsap.to(mesh.rotation, { duration: 0.3, delay: 2, y: 1})
 
 const tick = () => {
   const currentTime = Date.now();
@@ -417,9 +383,18 @@ const tick = () => {
 
 tick();
 
-document.addEventListener("DOMContentLoaded", function () {
-  var h2 = document.getElementById("proto");
-  h2.addEventListener("click", function () {
-    window.location.href = "/fonts/prototype/index.html";
-  });
-});
+function changeToLime() {
+  panel1.style.backgroundColor = "#e5ff9a";
+  panel2.style.backgroundColor = "#dbff74";
+  panel3.style.backgroundColor = "#cbff58";
+  panel4.style.backgroundColor = "#b1ee46";
+  panel5.style.backgroundColor = "#9dd227";
+}
+
+function changeToChoco() {
+  panel1.style.backgroundColor = "rgb(255, 253, 245)";
+  panel2.style.backgroundColor = "#a2b9e7";
+  panel3.style.backgroundColor = "#65341c";
+  panel4.style.backgroundColor = "#402315";
+  panel5.style.backgroundColor = "#311508";
+}

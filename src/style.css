@@ -1,3 +1,19 @@
+#mobile-warning {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: white;
+  z-index: 10000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -22,13 +38,31 @@ body {
   transition: background-color 0.5s ease-in-out;
 }
 
+#logo {
+  position: fixed;
+  max-width: 7vw;
+  z-index: 4;
+  top: 0.5vw;
+  left: 0.5vw;
+  padding: 15px;
+  cursor: pointer;
+}
+
 .page {
   height: 100vh;
+  scroll-snap-align: start; /* use 'start' for better cross-browser compatibility */
+  scroll-snap-stop: always;
+}
+
+.flex {
+  display: flex;
+  align-items: flex-end;
+  flex: 0 1 auto;
 }
 
 .webgl {
-  position: fixed;
-  top: 5vh;
+  position: absolute;
+  top: 8vh;
   left: 0;
   max-width: 99vw;
 }
@@ -37,6 +71,10 @@ body {
   position: relative;
   top: 52vh;
   margin-left: 6vw;
+}
+
+canvas.webgl {
+  cursor: pointer;
 }
 
 .heading {
@@ -132,7 +170,7 @@ body {
   margin-top: 13vh;
 }
 
-.content {
+.content2 {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
@@ -241,4 +279,87 @@ body {
 
 .h2-link h2 {
   margin: 0; /* Resets any default margin on the h2 */
+}
+
+.content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: nowrap; /* Prevents wrapping, ensuring side-by-side layout */
+  position: absolute;
+}
+
+.text-container,
+.image-container {
+  flex: 1; /* Each child takes equal width */
+  padding: 20px; /* Optional: Adds some spacing inside each container */
+}
+
+.image-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  margin-right: 5vh;
+}
+
+.kim {
+  max-width: 30vw;
+  border-radius: 4%;
+  margin-bottom: 4vh;
+}
+
+.page-2 {
+  display: flex;
+  justify-content: center; /* Horizontally center */
+  align-items: center; /* Vertically center */
+  flex-direction: column; /* Stack flex items vertically */
+}
+
+.text-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin-left: 5vw;
+  align-items: center;
+  margin-bottom: 15vh;
+  /* align-self: flex-start; */
+}
+
+.text-container h1,
+.text-container h2,
+.text-container p {
+  margin: revert; /* This will revert the margin back to the browser's default styling */
+  font-family: "Biko";
+  font-size: 1.4em;
+  color: #9dd227;
+  line-height: 1.4em;
+}
+
+.text-container h1 {
+  color: #9dd227;
+  font-family: Biko;
+  font-size: 1.8em;
+}
+
+#scroll-btn2 {
+  color: #9dd227;
+  border-color: #9dd227;
+  left: 0;
+  bottom: 0;
+}
+
+.text-container p {
+  margin: revert; /* This will revert the margin back to the browser's default styling */
+  font-family: "Rozanova";
+  font-size: 1.2em;
+}
+
+.learn {
+  font-size: 1rem;
+}
+
+.learn2 {
+  font-size: 1rem;
+  color: #9dd227;
 }
